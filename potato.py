@@ -108,7 +108,7 @@ def check_args(args):
     if not args.learn:
         raise ValueError("Nothing can be processed without previous knowledge. Let's learn something first")
     if args.regex is None:
-        raise ValueError('A regular expression must be specified to instantiate a new knowledge')
+        raise ValueError('A regular expression must be specified to get some new knowledge')
     if args.order < 1:
         raise ValueError('Markov Chain order must be positive. Value: ' + args.order)
 
