@@ -71,7 +71,7 @@ class WisePotato(object):
             if tokens:
                 likelihood = self.chain.move_to(tokens)
                 tag = WisePotato._tag_likelihood(likelihood)
-            output('[%s][%s] %s' % (tag, str(likelihood), line.rstrip()))
+            output('%s [%s][%s]' % (line.rstrip(), tag, str(likelihood)))
 
     def _extract_tokens(self, line):
         m = self.regex.match(line)
