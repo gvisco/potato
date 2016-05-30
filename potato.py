@@ -9,7 +9,7 @@ class MarkovChain(object):
     def __init__(self, order):
         verbose("New Markov Chain. Order %i" % order)
         self.order = order
-        # the state is a tuple made of 'order' element
+        # the state is a tuple made of 'order' different elements
         self.current_state = (None,) * order
         # the chain is a dictionary of adjacent states
         # keep a counter for each reachable state
