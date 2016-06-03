@@ -102,51 +102,71 @@ def output(txt):
     print txt
 
 
-def check_args(args):
-    if not os.path.isfile(args.input):
-        raise ValueError('Invalid input. Not a file. Value: ' + args.input)
-    if not args.learn:
-        raise ValueError("Nothing can be processed without previous knowledge. Let's learn something first")
-    if args.regex is None:
-        raise ValueError('A regular expression must be specified to get some new knowledge')
-    if args.order < 1:
-        raise ValueError('Markov Chain order must be positive. Value: ' + args.order)
+def check_positive(value):
+    ival = int(value)
+    if ival <= 0:
+        raise argparse.ArgumentTypeError("%s is an invalid positive int value" % value)
+    return ival
+
+
+def check_file(value):
+    if not os.path.isfile(value):
+        raise argparse.ArgumentTypeError("%s is not a file" % value)
+    return value
+
+
+def check_regex(value):
+    try:
+        re.compile(value)
+    except re.error:
+        raise argparse.ArgumentTypeError("%s is not a valid regex" % value)
+    return value
 
 
 if __name__ == '__main__':
     global verb
-    parser = argparse.ArgumentParser(description="Artificial Ignorance applied to LOG files")
-    parser.add_argument('input', help='Input file')
-    parser.add_argument('-k', '--knowledge', help='File used to load/save knowledge.\n'
-                                                  'Default: potato.kb', default='potato.kb')
-    parser.add_argument('-l', '--learn', help='Learn from input. '
-                                              'Mandatory if the knowledge file does not exist.', action='store_true')
-    parser.add_argument('-re', '--regex', help='Regular expression to extract data from the input file. '
-                                               'Mandatory if the knowledge file does not exist, ignored otherwise.')
-    parser.add_argument('-o', '--order', help='Markov Chain order. '
-                                              'Mandatory if the knowledge file does not exist, ignored otherwise.\n'
-                                              'Default: 1',
-                        type=int, default=1)
+    parser = argparse.ArgumentParser(description="Log tagging through Artificial Ignorance")
     parser.add_argument('-v', '--verbose', help='Print debug output', action='store_true')
+
+    subparsers = parser.add_subparsers(help='Potato command')
+
+    init_parser = subparsers.add_parser('init')
+    init_parser.set_defaults(which='init')
+    init_parser.add_argument('regex', help='Regular expression to extract data from the input file.', type=check_regex)
+    init_parser.add_argument('-k', '--knowledge', help='File used to store knowledge.\n'
+                                                       'Default: potato.kb', default='potato.kb')
+    init_parser.add_argument('-o', '--order', help='Markov Chain order.\n'
+                                                   'Default: 1', type=check_positive, default=1)
+
+    learn_parser = subparsers.add_parser('learn')
+    learn_parser.set_defaults(which='learn')
+    learn_parser.add_argument('input', help='Training data')
+    learn_parser.add_argument('-k', '--knowledge', help='File used to store knowledge.\n'
+                                                        'Default: potato.kb', default='potato.kb', type=check_file)
+
+    tag_parser = subparsers.add_parser('tag')
+    tag_parser.set_defaults(which='tag')
+    tag_parser.add_argument('input', help='File to tag')
+    tag_parser.add_argument('-k', '--knowledge', help='File used to store knowledge.\n'
+                                                      'Default: potato.kb', default='potato.kb', type=check_file)
 
     args = parser.parse_args()
     verb = args.verbose
 
-    # instantiate
-    if os.path.isfile(args.knowledge):
+    if args.which is 'init':
+        potato = WisePotato(args.regex, args.order)
+        verbose("Init knowledge file: %s" % args.knowledge)
+        pickle.dump(potato, open(args.knowledge, 'w'))
+    elif args.which is 'learn':
         verbose("Loading knowledge file: %s" % args.knowledge)
         potato = pickle.load(open(args.knowledge, 'r'))
-    else:
-        check_args(args)
-        potato = WisePotato(args.regex, args.order)
-
-    # process
-    if args.learn:
         potato.learn_from_file(args.input)
-    else:
-        potato.process_file(args.input)
-
-    # save
-    if args.learn:
         verbose("Saving knowledge file: %s" % args.knowledge)
         pickle.dump(potato, open(args.knowledge, 'w'))
+    elif args.which is 'tag':
+        verbose("Loading knowledge file: %s" % args.knowledge)
+        potato = pickle.load(open(args.knowledge, 'r'))
+        potato.process_file(args.input)
+    else:
+        raise ValueError('Unrecognized command line args')
+
