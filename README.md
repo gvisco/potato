@@ -24,7 +24,7 @@ According to [Wikipedia page on Log Analysis](https://en.wikipedia.org/wiki/Log_
 > In log analysis, this means recognizing and ignoring the regular, common log messages that result from the normal
 > operation of the system, and therefore are not too interesting.
 
-Potato is therefore an Artificial Ignorance tool, which goal is mainly to ease the pain of analysing large log files for
+Potato is therefore an Artificial Ignorance tool, which goal is to ease the pain of analysing large log files for
 troubleshooting.
 
 The underlying idea is pretty simple: identify the most relevant part of a log file -- i.e. anomalies -- so to ignore
@@ -42,9 +42,9 @@ To process a log line, it's necessary to map it to a corresponding state of the 
 In Potato, this mapping is implemented applying a regular-expression to the log line. If the line matches the regex, then
 all the defined groups, toghether, are the corresponding state in the chain.
 
-Given a log line, therefore, the user is provided with a mean to select only the relevant info. In fact, the regular
-expression should aim at selecting only the information required to identify the "business" action, ignoring any
-technical detail.
+From the user standpoint, the regular-expression is also a tool used to select only the relevant info from a possibly large
+log line. In fact, the regular expression should aim at selecting only the information required to identify the "business"
+action, ignoring any technical detail.
 
 ##### Example
 Given a log file with traces like this:
@@ -91,5 +91,6 @@ Use a "regular" log file to show the model how a "regular" log file should look 
 #### Command: ```tag```
 Load a Potato analyser instance and process a log file.
 * Output is written on the standard output, so you may want to redirect it to a file.
+* The tag and the likelihood of every trace are *appended* at the end of the line.
 * The knowledge file is not updated in this case.
 
