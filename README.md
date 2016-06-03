@@ -79,14 +79,14 @@ Type ```python potato.py -h``` or ```python potato.py <command> -h```  to get th
 
 #### Command: ```init```
 Create a new instance of Potato analyser. Each instance is bound to a knowledge file (by default ```./potato.kb```)
-that is used to store all the acquired data.
+that is used to store all the data obtained by training the model.
 * The regular expression, needed to extract the info from the log lines, must be passed here as a parameter.
 * Markov Chain order higher than one can be set on init.
 
 #### Command: ```learn```
 Load a Potato analyser instance and train it.
 Use a "regular" log file to show the model how a "regular" log file should look like.
-* The knowledge file is updated with the newly acquired knowledge.
+* The knowledge file is updated with the newly obtained knowledge.
 
 #### Command: ```tag```
 Load a Potato analyser instance and process a log file.
