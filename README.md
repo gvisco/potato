@@ -12,7 +12,7 @@ Log lines are marked as:
 - ```COMMON``` if 50% < likelihood <= 75%;
 - ```UNUSUAL``` if 25% < likelihood <= 50%;
 - ```WARNING``` if 5% < likelihood <= 25%;
-- ```POTATO``` if the likelihood is below or equals to 5%;
+- ```POTATO!``` if the likelihood is equals to 5% or below;
 - ```SKIP``` if the line cannot be processed.
 
 
@@ -27,7 +27,7 @@ According to [Wikipedia page on Log Analysis](https://en.wikipedia.org/wiki/Log_
 Potato is therefore an Artificial Ignorance tool, which goal is to ease the pain of analysing large log files for
 troubleshooting.
 
-The underlying idea is pretty simple: identify the most relevant part of a log file -- i.e. anomalies -- so to ignore
+The idea behind Potato is pretty simple: identify the most relevant part of a log file -- i.e. anomalies -- so to ignore
 the "noise" produced by the regular execution.
 
 ## How it works
