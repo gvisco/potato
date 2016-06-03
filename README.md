@@ -16,7 +16,7 @@ Log lines are marked as:
 - ```SKIP``` if the line cannot be processed.
 
 
-## Why Potato?
+## What Potato is
 According to [Wikipedia page on Log Analysis](https://en.wikipedia.org/wiki/Log_analysis), *Artificial Ignorance* is
 
 > [...] a type of machine learning which is a process of discarding log entries which are known to be
@@ -34,7 +34,7 @@ the "noise" produced by the regular execution.
 Potato uses Markov Chains to build a model and predict the occurrence of a line in the file.
 
 More info on Markov Chains can be found on [Wikipedia](https://en.wikipedia.org/wiki/Markov_chain).
-A graphical explaination of Markov Chains models can be found [here](http://setosa.io/blog/2014/07/26/markov-chains/).
+A nice graphical explaination of Markov Chains models can be found [here](http://setosa.io/blog/2014/07/26/markov-chains/).
 
 #### Markov Chain states
 To process a log line, it's necessary to map it to a corresponding state of the Markov Chain.
@@ -49,7 +49,7 @@ technical detail.
 ##### Example
 Given a log file with traces like this:
 ```
-03:02:38:359|1100-00162:MYLIBRARY: Subscription {INFO} Action {Update} Pattern {PATTER_NAME.} Snapshot {false} Record {PATTERN_NAME.XYZ} Code {123456} Value1 {1.25} Value2 {USD} Value3 {4321} Desc {The description} Id {XYZ} Thread {MyThread(my.test.stuff.com:24017)}
+03:02:38:359|1100-00162:MYLIBRARY: Subscription {INFO} Action {Update} Pattern {PATTERN_NAME.} Snapshot {false} Record {PATTERN_NAME.XYZ} Code {123456} Value1 {1.25} Value2 {USD} Value3 {4321} Desc {The description} Id {XYZ} Thread {MyThread(my.test.stuff.com:24017)}
 ```
 The following regular expression
 ```
@@ -62,7 +62,7 @@ The corresponding state in the Markov Chain would be the tuple ```('MYLIBRARY', 
 #### Markov Chain order
 Potato supports *Markov Chains of order m* (see [Markov Chain Variations](https://en.wikipedia.org/wiki/Markov_chain#Variations) on Wikipedia).
 
-When the order is set to ```m > 1```, every state of the Markov Chain is the conactenation of (the last) ```m``` states.
+When the order is set to ```m > 1```, every state of the Markov Chain is the concatenation of (the last) ```m``` states.
 Nothing changes in the way the information are extracted from the log file.
 
 Increasing the chain order "gives more memory" to the model and makes the outcome less affected by small variations in
@@ -90,6 +90,6 @@ Use a "regular" log file to show the model how a "regular" log file should look 
 
 #### Command: ```tag```
 Load a Potato analyser instance and process a log file.
-* Output is written on the standard out, so you may want to redirect it to a file.
+* Output is written on the standard output, so you may want to redirect it to a file.
 * The knowledge file is not updated in this case.
 
