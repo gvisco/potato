@@ -12,8 +12,7 @@ class MarkovChain(object):
         # the state is a tuple made of 'order' different elements
         self.current_state = (None,) * order
         # the chain is a dictionary of adjacent states
-        # keep a counter for each reachable state
-        # use the hash key to keep the total
+        # a counter is kept for every reachable state, the hash key keeps the total
         self.chain = {self.current_state: {'#': 0.0}}
 
     def add_transition(self, element):
@@ -130,7 +129,7 @@ if __name__ == '__main__':
 
     subparsers = parser.add_subparsers(help='Potato command')
 
-    init_parser = subparsers.add_parser('init')
+    init_parser = subparsers.add_parser('init', help='Initialize a new Potato analyser')
     init_parser.set_defaults(which='init')
     init_parser.add_argument('regex', help='Regular expression to extract data from the input file.', type=check_regex)
     init_parser.add_argument('-k', '--knowledge', help='File used to store knowledge.\n'
@@ -138,13 +137,13 @@ if __name__ == '__main__':
     init_parser.add_argument('-o', '--order', help='Markov Chain order.\n'
                                                    'Default: 1', type=check_positive, default=1)
 
-    learn_parser = subparsers.add_parser('learn')
+    learn_parser = subparsers.add_parser('learn', help='Read file and acquire new knowledge')
     learn_parser.set_defaults(which='learn')
     learn_parser.add_argument('input', help='Training data')
     learn_parser.add_argument('-k', '--knowledge', help='File used to store knowledge.\n'
                                                         'Default: potato.kb', default='potato.kb', type=check_file)
 
-    tag_parser = subparsers.add_parser('tag')
+    tag_parser = subparsers.add_parser('tag', help='Tag each line according to its likelihood')
     tag_parser.set_defaults(which='tag')
     tag_parser.add_argument('input', help='File to tag')
     tag_parser.add_argument('-k', '--knowledge', help='File used to store knowledge.\n'
