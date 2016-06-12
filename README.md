@@ -2,8 +2,6 @@
 > You can't judge a book by its potato.
 
 ## What Potato does
-Potato is a log files analyser.
-
 Potato scans a log file and it classifies every line according to its likelihood, which is calculated through a simple
 machine-learning-based prediction model.
 
